@@ -18,7 +18,7 @@ const App = () => {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Ada&apos;s Task List</h1>
+        <h1>Ada&apos;s Task List</h1>   {/* what is this? */}
       </header>
       <main>
         <div>{<TaskList tasks={TASKS} />}</div>
