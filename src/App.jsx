@@ -17,7 +17,20 @@ const TASKS = [
 ];
 
 const App = () => {
-  const [complete, setComplete] = useState(isComplete);
+  const [taskData, setTaskData] = useState(TASKS);
+
+  const taskComplete = (id) => {
+    const taskUpdate = (tasks) => {
+      return tasks.map((task) => {
+        if (task.id === id) {
+          return {...task, isComplete: !task.isComplete};
+        } else {
+          return task;
+        }
+      });
+    };
+    setTaskData(taskUpdate);
+  };
 
   return (
     <div className="App">
@@ -25,11 +38,10 @@ const App = () => {
         <h1>Ada&apos;s Task List</h1>
       </header>
       <main>
-        <div>{<
-          TaskList
-          tasks={TASKS}
-          onComplete={}
-          />}</div>
+        <div>{<TaskList
+          tasks={taskData}
+          onComplete={taskComplete}
+        />}</div>
       </main>
     </div>
   );
