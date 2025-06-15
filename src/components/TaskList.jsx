@@ -3,7 +3,7 @@ import Task from './Task.jsx';
 import './TaskList.css';
 
 // Props now are tasks and onComplete
-const TaskList = ({ tasks , onComplete }) => {
+const TaskList = ({ tasks , onComplete ,onDelete}) => {
   const getTaskListJSX = (tasks) => {
     return tasks.map((task) => {
       return (
@@ -13,6 +13,7 @@ const TaskList = ({ tasks , onComplete }) => {
           title={task.title}
           isComplete={task.isComplete}
           onComplete={onComplete}
+          onDelete={onDelete}
         />
       );
     });
@@ -30,6 +31,7 @@ TaskList.propTypes = {
   ).isRequired,
   //add event handler
   onComplete: PropTypes.func.isRequired,
+  onDelete:PropTypes.func.isRequired,
 };
 
 export default TaskList;

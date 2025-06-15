@@ -8,6 +8,10 @@ const Task = (props) => {
     props.onComplete(props.id);
   };
 
+  const handleOnDelete = () => {
+    props.onDelete(props.id);
+  };
+
   return (
     <li className="tasks__item">
       <button
@@ -16,7 +20,12 @@ const Task = (props) => {
       >
         {props.title}
       </button>
-      <button className="tasks__item__remove button">x</button>
+      <button 
+        className="tasks__item__remove button"
+        onClick={handleOnDelete}
+      >
+        x
+      </button>
     </li>
   );
 };
@@ -27,6 +36,7 @@ Task.propTypes = {
   isComplete: PropTypes.bool.isRequired,
   // add event handlers
   onComplete: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
 };
 
 export default Task;

@@ -32,6 +32,12 @@ const App = () => {
     setTaskData(taskUpdate);
   };
 
+  const taskDelete = (id) => {
+    setTaskData((task) => {
+      return task.filter(task => task.id !== id);
+    });
+  };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -41,6 +47,7 @@ const App = () => {
         <div>{<TaskList
           tasks={taskData}
           onComplete={taskComplete}
+          onDelete={taskDelete}
         />}</div>
       </main>
     </div>
