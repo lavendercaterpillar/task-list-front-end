@@ -16,8 +16,8 @@ const getAllTaskApi = () => {
 };
 
 const convertFromApi = (apiTask) => {
-  const { id, title, description, completed_at } = apiTask;
-  const newTask = { id, title, description, completedAt: completed_at };
+  const { id, title, description, completed_at: completedAt } = apiTask;
+  const newTask = { id, title, description, completedAt };
   return newTask;
 };
 
