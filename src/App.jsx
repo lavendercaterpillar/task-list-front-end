@@ -2,15 +2,16 @@ import TaskList from './components/TaskList.jsx';
 import './App.css';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+//import DATA from './data.json';
 
-const kBaseUrl = 'http://localhost:5000';
+const kBaseUrl = 'http://127.0.0.1:5000';
 
 const getAllTaskApi = () => {
   return axios.get(`${kBaseUrl}/tasks`)
     .then(response => {
-      return response.taskData.map(convertFromApi)
+      return response.data.map(convertFromApi);
     })
-    .catch( error => {
+    .catch(error => {
       console.log(error);
     });
 };
@@ -21,36 +22,56 @@ const convertFromApi = (apiTask) => {
   return newTask;
 };
 
-function App() {
-  const [taskData, setTaskData] = useState([
-    {
-      id: 1,
-      title: 'Mow the lawn',
-      isComplete: false,
-    },
-    {
-      id: 2,
-      title: 'Cook Pasta',
-      isComplete: true,
-    },
-  ]);
+const toggleTaskApi = (id, completedAt) => {
+  let taskStatusUrl;
+  if (completedAt) {
+    taskStatusUrl = `${kBaseUrl}/tasks/${id}/mark_incomplete`;
+  } else {
+    taskStatusUrl = `${kBaseUrl}/tasks/${id}/mark_complete`;
+  }
 
-  const updateTask = (id) => {
-    setTaskData(tasks => {
-      return tasks.map(task => { //create new list and new task 
-        if (task.id === id) {
-          return { ...task, isComplete: !task.isComplete };
-        } else {
-          return task; //use directly in the new list
-        }
-      });
+  return axios.patch(taskStatusUrl)
+    .then(response => {
+      return convertFromApi(response.data);
+    })
+    .catch(error => {
+      console.log(error);
     });
+};
+
+const deleteTaskApi = (id) => {
+  return axios.delete(`${kBaseUrl}/tasks/${id}`)
+    .catch(error => {
+      console.log(error);
+    });
+};
+
+function App() {
+  const [taskData, setTaskData] = useState([]);
+
+  const getAllTasks = () => {
+    return getAllTaskApi()
+      .then(tasks => setTaskData(tasks));
+  };
+
+  useEffect(() => {
+    getAllTasks();
+  }, []);
+
+  const updateTask = (id, completedAt) => {
+    return toggleTaskApi(id, completedAt)
+      .then(updatedTask => {
+        setTaskData(tasks =>
+          tasks.map(task => (task.id === updatedTask.id ? updatedTask : task))
+        );
+      });
   };
 
   const deleteTask = (id) => {
-    setTaskData(task => {
-      return task.filter(task => task.id !== id);
-    });
+    return deleteTaskApi(id)
+      .then(() => {
+        setTaskData(tasks => tasks.filter(task => task.id !== id));
+      });
   };
 
   return (
@@ -59,7 +80,11 @@ function App() {
         <h1>Ada&apos;s Task List</h1>
       </header>
       <main>
-        <TaskList tasks={taskData} onUpdate={updateTask} onDelete={deleteTask} />
+        <TaskList
+          tasks={taskData}
+          onUpdate={updateTask}
+          onDelete={deleteTask}
+        />
       </main>
     </div>
   );
