@@ -2,6 +2,7 @@ import TaskList from './components/TaskList.jsx';
 import './App.css';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import NewTaskForm from './components/NewTaskForm.jsx';
 //import DATA from './data.json';
 
 const kBaseUrl = 'http://127.0.0.1:5000';
@@ -46,6 +47,7 @@ const deleteTaskApi = (id) => {
     });
 };
 
+
 function App() {
   const [taskData, setTaskData] = useState([]);
 
@@ -74,6 +76,18 @@ function App() {
       });
   };
 
+  const addNewTask = ({ titleData, descriptionData }) => {
+    return axios.post(`${kBaseUrl}/tasks`, {
+      title: titleData,
+      description: descriptionData
+    })
+      .then(response => {
+        const newTask = convertFromApi(response.data.task);
+        setTaskData(tasks => [...tasks, newTask]);
+      })
+      .catch(error => console.log(error));
+  };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -85,6 +99,7 @@ function App() {
           onUpdate={updateTask}
           onDelete={deleteTask}
         />
+        <NewTaskForm onTaskAdd={addNewTask} />
       </main>
     </div>
   );

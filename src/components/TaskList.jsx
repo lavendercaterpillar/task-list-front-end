@@ -22,9 +22,9 @@ const TaskList = (props) => {
 TaskList.propTypes = {
   tasks: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number.isRequired,
+      id: PropTypes.number,
       title: PropTypes.string.isRequired,
-      isComplete: PropTypes.bool.isRequired,
+      isComplete: PropTypes.bool,
     })
   ).isRequired,
   onUpdate: PropTypes.func.isRequired,
